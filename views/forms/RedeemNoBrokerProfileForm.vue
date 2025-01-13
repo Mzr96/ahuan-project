@@ -14,7 +14,7 @@ const handleSubmit = async () => {
 <template>
   <VRow justify="center" class="mx-2">
     <VCol class="text-center" :cols="12">
-      <VIcon icon=" mdi-alert-circle-outline" size="58" color="error" />
+      <VIcon icon=" mdi-alert-circle-outline" size="58" color="warning" />
     </VCol>
     <VCol class="text-center text-body-2" :cols="12">
       <p>شما در کارگزاری سهم آشنا حساب کاربری ایجاد نکرده‌اید!</p>
