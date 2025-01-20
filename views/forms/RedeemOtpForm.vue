@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { VForm, VOtpInput } from "vuetify/components";
+import { verifyOtp } from "~/services/authenticationServices";
 
 const emits = defineEmits<{
   submit: [otp: string];
@@ -11,20 +12,37 @@ const props = defineProps<{
   nationalCode: string;
 }>();
 
-const { clockFormat, timer, restart } = useTimer(30);
 const form = ref<VForm>();
 const otp = ref("");
 const isLoading = ref(false);
-const handleSubmit = async () => {
-  const formResult = await form.value?.validate();
-  if (!formResult?.valid) return;
-  isLoading.value = true;
-  await sleep(1500);
-  isLoading.value = false;
-  emits("submit", otp.value);
-};
+
+const { clockFormat, timer, restart } = useTimer(30);
 
 watch(otp, (newVal) => newVal.length === 6 && handleSubmit());
+
+const handleSubmit = async () => {
+  isLoading.value = true;
+  try {
+    // form validation
+    const formResult = await form.value?.validate();
+    if (!formResult?.valid) return;
+
+    const loginData = await verifyOtp(
+      props.mobileNumber,
+      props.nationalCode,
+      otp.value
+    );
+    // Store token in cookie
+    const accessToken = useCookie("accessToken");
+    accessToken.value = loginData.accessToken;
+
+    emits("submit", otp.value);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <template>
