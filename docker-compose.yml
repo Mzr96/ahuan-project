@@ -3,7 +3,7 @@ services:
     image: ${IMAGE}:${VERSION}
     container_name: rdm-front
     ports: 
-      - "443:443"
+      - "4443:443"
     restart: always 
     volumes:
       - ./ssl/certificate.crt:/etc/ssl/certificate.crt
