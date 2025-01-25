@@ -1,0 +1,70 @@
+variables:
+  IMAGE_NAME: rdm-front
+  DOCKER_FILE: ./Dockerfile
+  DOCKER_COMPOSE: ./docker-compose.yml
+
+  IMAGE_REGISTRY: $REGISTRY_URL/$IMAGE_NAME
+  BASE_IMAGE_DEPLOY: $REGISTRY_URL/ubuntu-rabinpay:24.04
+  BASE_IMAGE_BUILD: $REGISTRY_URL/docker:24.0.6-dind
+
+stages:
+  - rdm_front_build
+  - rdm_front_deploy
+
+.before_build: &before_build
+  - cat .env.production
+  - mkdir -p ~/.docker
+  - echo $DOCKER_AUTH_CONFIG > ~/.docker/config.json
+
+.build: &build
+  - echo "Starting build"
+  - docker build -t "$IMAGE_REGISTRY_BUILD:$CI_COMMIT_SHORT_SHA" -f $DOCKER_FILE .
+  - echo "Build complete:$IMAGE_REGISTRY_BUILD:$CI_COMMIT_SHORT_SHA"
+  - docker push "$IMAGE_REGISTRY_BUILD:$CI_COMMIT_SHORT_SHA"
+  - echo "Image pushed to your registry"
+  - echo "Cleaning up"
+  - docker rmi "$IMAGE_REGISTRY_BUILD:$CI_COMMIT_SHORT_SHA"
+
+build-job:
+  stage: rdm_front_build
+  tags:
+    - build
+  variables:
+    IMAGE_REGISTRY_BUILD: "$IMAGE_REGISTRY"
+  image: $BASE_IMAGE_BUILD
+  before_script:
+    - echo  "VITE_API_BASE_URL=${VITE_API_BASE_URL_REDEEM}" > .env.production
+    - *before_build
+  script:
+    - *build
+  allow_failure: false
+  #only:
+  #  - develop
+  #  - master
+
+depoly-job:
+  stage: rdm_front_deploy
+  image: $BASE_IMAGE_DEPLOY
+  tags:
+    - deploy
+  variables:
+    IMAGE_REGISTRY_BUILD: "$IMAGE_REGISTRY"
+    REMOTE_PATH: /home/$REDEEM_USER/$IMAGE_NAME
+  before_script:
+    - ls -la
+    - scp -i /app/key/rdm-devops-ssh-key -P 4022 -o StrictHostKeyChecking=no $DOCKER_COMPOSE $REDEEM_USER@$REDEEM_SERVER:$REMOTE_PATH/docker-compose.yml
+  script:
+    - |
+      ssh $REDEEM_USER@$REDEEM_SERVER -i /app/key/rdm-devops-ssh-key -o StrictHostKeyChecking=no -p 4022 << EOF
+      echo "${IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}"
+      export VERSION=$CI_COMMIT_SHORT_SHA
+      export IMAGE=$IMAGE_REGISTRY_BUILD
+      cd $IMAGE_NAME          
+      ls -la
+      docker compose up -d
+      EOF
+  #only:
+  #  - master
+  #  - develop
+  needs:
+    - build-job
