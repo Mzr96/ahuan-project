@@ -1,29 +1,31 @@
+import type { authenticationData, DefaultResponse } from "~/types/ApiResponse";
+// TODO : Capthcha set to null by default(temporary)
 export const sendOtp = async (
   cellPhone: string,
   captchaCode: string | null = null,
   captchaId: string | null = null
 ) => {
-  try {
-    await $api("/api/authentication/otp", {
-      method: "POST",
-      body: {
-        cellPhone,
-        captchaCode,
-        captchaId,
-      },
-    });
-  } catch (error) {
-    throw error;
-  }
+  await $api("/api/authentication/otp", {
+    method: "POST",
+    body: {
+      cellPhone,
+      captchaCode,
+      captchaId,
+    },
+  });
 };
 
-export const verifyOtp = async (mobileNumber: number, otp: number) => {
-  try {
-    await $api("/api/authentication/verifyOtp", {
+export const verifyOtp = async (
+  cellPhone: string,
+  nationalCode: string,
+  otp: string
+) => {
+  const response = await $api<DefaultResponse<authenticationData>>(
+    "/api/authentication",
+    {
       method: "POST",
-      body: { mobileNumber, otp },
-    });
-  } catch (error) {
-    throw error;
-  }
+      body: { cellPhone, nationalCode, otp },
+    }
+  );
+  return response.data;
 };

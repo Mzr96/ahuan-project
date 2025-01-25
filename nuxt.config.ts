@@ -15,7 +15,6 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }));
       });
     },
-    "@sidebase/nuxt-auth",
     "@nuxt/fonts",
     "@vueuse/nuxt",
   ],
@@ -31,25 +30,6 @@ export default defineNuxtConfig({
     resolve: {
       alias: {
         "@styles": "~/assets/styles",
-      },
-    },
-  },
-
-  // NextAuth configs
-  auth: {
-    originEnvKey: "NUXT_API_BASE_URL",
-    baseURL: "https://demo.rabinpay.com:3443/api/authenticate",
-    provider: {
-      type: "local",
-
-      endpoints: {
-        signIn: { path: "gettoken", method: "post" },
-        signOut: { path: "api/signOut", method: "post" },
-      },
-
-      token: {
-        signInResponseTokenPointer: "/data/token",
-        cookieName: "accessToken",
       },
     },
   },

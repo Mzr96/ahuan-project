@@ -1,14 +1,36 @@
 <script setup lang="ts">
+import { RedeemState } from "~/enums/redeemState";
+import { isCustomerSignedUpInBroker } from "~/services/customerServices";
+import { validateGift } from "~/services/giftCodeServices";
+interface Props {
+  giftCode: string;
+  dsCode: string;
+}
+
+const props = defineProps<Props>();
+
 const emits = defineEmits<{
-  submit: [];
+  submit: [pin: string, nextState: RedeemState];
 }>();
+
 const pin = ref("");
 const isLoading = ref(false);
 
 const handleSubmit = async () => {
-  isLoading.value = true;
-  await sleep(785);
-  emits("submit");
+  try {
+    isLoading.value = true;
+    await validateGift(pin.value, props.dsCode, props.giftCode);
+    const customerStateInBroker = await isCustomerSignedUpInBroker(
+      props.dsCode
+    );
+    if (customerStateInBroker.isCustomer)
+      emits("submit", pin.value, RedeemState.ChooseInstruments);
+    else emits("submit", pin.value, RedeemState.NoBrokerProfile);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 <template>

@@ -62,8 +62,7 @@ const handleSubmit = async () => {
     isLoading.value = true;
     const validate = await form.value?.validate();
     if (!validate?.valid) return;
-    // await sendOtp(formModel.mobileNumber);
-    await sleep(1500);
+    await sendOtp(formModel.mobileNumber);
     emits("submit", formModel.mobileNumber, formModel.nationalCode);
 
     // TODO : Error should be strict type
