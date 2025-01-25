@@ -53,38 +53,46 @@ const handleSubmit = async () => {
 };
 </script>
 <template>
-  <VRow class="mx-2">
-    <VCol :cols="12" class="mb-4 font-weight-bold">
-      <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
-    </VCol>
-    <VCol :cols="12" class="d-flex flex-column ga-5 available-instruments">
-      <template v-if="isLoadingAvailableInstruments">
-        <VSkeletonLoader v-for="n in 3" :key="n" type="button" />
-      </template>
-      <VBtn
-        v-for="instrument in instruments"
-        :disabled="isLoading"
-        @click="selectedInstrumentId = instrument.id"
-        class="text-center font-weight-bold"
-        :key="instrument.id"
-        :color="instrument.id === selectedInstrumentId ? 'primary' : 'primary'"
-        :variant="instrument.id === selectedInstrumentId ? 'elevated' : 'tonal'"
-        size="large"
-        :text="instrument.name"
-        rounded="lg"
-      />
-    </VCol>
-  </VRow>
-  <VCol class="position-absolute bottom-0" :cols="12">
-    <VBtn
-      :loading="isLoading"
-      :disabled="!selectedInstrumentId"
-      @click="handleSubmit"
-      text="مرحله بعد"
-      type="submit"
-      class="w-100 text-body-2 font-weight-thin"
-    />
-  </VCol>
+  <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
+    <div>
+      <VCol :cols="12" class="mb-4 font-weight-bold">
+        <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
+      </VCol>
+      <VCol :cols="12" class="d-flex flex-column ga-5 available-instruments">
+        <template v-if="isLoadingAvailableInstruments">
+          <VSkeletonLoader v-for="n in 3" :key="n" type="button" />
+        </template>
+        <VBtn
+          v-for="instrument in instruments"
+          :disabled="isLoading"
+          @click="selectedInstrumentId = instrument.id"
+          class="text-center font-weight-bold"
+          :key="instrument.id"
+          :color="
+            instrument.id === selectedInstrumentId ? 'primary' : 'primary'
+          "
+          :variant="
+            instrument.id === selectedInstrumentId ? 'elevated' : 'tonal'
+          "
+          size="large"
+          :text="instrument.name"
+          rounded="lg"
+        />
+      </VCol>
+    </div>
+    <div>
+      <VCol class="" :cols="12">
+        <VBtn
+          :loading="isLoading"
+          :disabled="!selectedInstrumentId"
+          @click="handleSubmit"
+          text="مرحله بعد"
+          type="submit"
+          class="w-100 text-body-2 font-weight-thin"
+        />
+      </VCol>
+    </div>
+  </div>
 </template>
 <style>
 .available-instruments .v-skeleton-loader__button {

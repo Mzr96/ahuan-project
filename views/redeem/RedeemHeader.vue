@@ -3,7 +3,7 @@
     <VImg width="120" class="mx-auto" src="/public/images/logo.png" />
     <VImg
       style="filter: grayscale(100)"
-      width="200"
+      width="230"
       class="mx-auto pt-10"
       src="/public/images/gift.png"
     />

@@ -1,19 +1,21 @@
 <template>
-  <VCol>
-    <p class="text-body-2 font-weight-bold">سلام!</p>
-    <p class="text-body-2 font-weight-bold">
-      برای فعال کردن کارت هدیه اطلاعات خودت رو وارد کن
-    </p>
-  </VCol>
-  <VForm ref="form" @submit.prevent="handleSubmit">
-    <div>
+  <VForm
+    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
+    ref="form"
+    @submit.prevent="handleSubmit"
+  >
+    <div class="w-100">
+      <VCol align-self="start" :cols="12">
+        <p class="text-body-2 font-weight-bold">سلام!</p>
+        <p class="text-body-2 font-weight-bold">
+          برای فعال کردن کارت هدیه اطلاعات خودت رو وارد کن
+        </p>
+      </VCol>
       <VCol :cols="12">
         <VTextField
           v-model="formModel.mobileNumber"
           label="شماره تماس"
           type="number"
-          dir="ltr"
-          append-inner-icon="mdi-cellphone"
           :rules="[requiredValidator, (value) => lengthValidator(value, 11)]"
           hide-spin-buttons
         />
@@ -23,8 +25,6 @@
           v-model="formModel.nationalCode"
           label="کد ملی"
           type="number"
-          dir="ltr"
-          append-inner-icon="mdi-card-account-details-outline"
           :rules="[
             requiredValidator,
             (value) => betweenLengthValidator(value, 10, 11),
@@ -32,7 +32,9 @@
           hide-spin-buttons
         />
       </VCol>
-      <VCol class="position-absolute bottom-0">
+    </div>
+    <div>
+      <VCol>
         <VBtn
           text="مرحله بعد"
           type="submit"

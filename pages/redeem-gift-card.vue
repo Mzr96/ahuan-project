@@ -72,7 +72,7 @@ const handlePinFormSubmit = async (pin: string, nextState: RedeemState) => {
     <template v-if="currentState !== RedeemState.Success">
       <RedeemHeader />
       <RedeemStepper :active-step="currentState" />
-      <div class="flex-grow-1 position-relative mt-6">
+      <div class="flex-grow-1">
         <RedeemInitialForm
           v-if="currentState === RedeemState.Authentication"
           @submit="handleInitialFormSubmit"
