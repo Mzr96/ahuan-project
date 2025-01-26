@@ -6,14 +6,13 @@ COPY package*.json ./
 RUN npm install --force
 
 
-RUN npm run generate
+RUN npm run build
 
-FROM nginx:stable-alpine as production-stage
+FROM node:16-alpine as production-stage
 
-COPY --from=build-stage /app/.output/public /usr/share/nginx/html
-
-COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /app/.output  app/.output
+COPY --from=build-stage /app/.nuxt  app/.nuxt
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", ".output/server/index.mjs"]
