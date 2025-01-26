@@ -6,11 +6,11 @@ COPY package*.json ./
 RUN npm install --force
 
 
-RUN npm run build
+RUN npm run generate
 
 FROM nginx:stable-alpine as production-stage
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/.output/public /usr/share/nginx/html
 
 COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
 
