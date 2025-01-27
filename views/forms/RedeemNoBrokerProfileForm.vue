@@ -1,14 +1,27 @@
 <script setup lang="ts">
+import { isCustomerSignedUpInBroker } from "~/services/customerServices";
+
+interface Props {
+  dsCode: string;
+}
+const { dsCode } = defineProps<Props>();
 const emits = defineEmits<{
   submit: [];
 }>();
 
 const isLoading = ref(false);
-
+const { showSnackbar } = useSnackbar();
 const handleSubmit = async () => {
-  isLoading.value = true;
-  await sleep(1112);
-  emits("submit");
+  try {
+    isLoading.value = true;
+    const customerStateInBroker = await isCustomerSignedUpInBroker(dsCode);
+    if (customerStateInBroker.isCustomer) emits("submit");
+    else showSnackbar("نیاز به ایجاد حساب در کارگزاری", "warning");
+  } catch (error: any) {
+    showSnackbar(error.message, "warning");
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 <template>

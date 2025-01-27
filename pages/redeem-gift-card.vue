@@ -91,6 +91,7 @@ const handlePinFormSubmit = async (pin: string, nextState: RedeemState) => {
           @submit="handlePinFormSubmit"
         />
         <RedeemNoBrokerProfileForm
+          :ds-code="loginModel.dsCode"
           v-else-if="currentState === RedeemState.NoBrokerProfile"
           @submit="currentState++"
         />

@@ -5,7 +5,7 @@ export interface DefaultResponse<TData> {
   metadata?: string;
 }
 
-interface Error {
+export interface ErrorResponse {
   message: string;
   code: string;
   traceCode: string;

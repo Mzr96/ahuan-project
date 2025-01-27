@@ -59,6 +59,8 @@ const formModel = reactive({
   nationalCode: "",
 });
 
+const { showSnackbar } = useSnackbar();
+
 const handleSubmit = async () => {
   try {
     isLoading.value = true;
@@ -70,6 +72,7 @@ const handleSubmit = async () => {
     // TODO : Error should be strict type
   } catch (error: any) {
     console.log(error.data);
+    showSnackbar(error.message, "error");
   } finally {
     isLoading.value = false;
   }

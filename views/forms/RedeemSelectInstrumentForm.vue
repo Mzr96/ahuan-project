@@ -18,7 +18,7 @@ const selectedInstrumentId = ref();
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
 const instruments = ref<Array<InstrumentDataItem>>();
-
+const { showSnackbar } = useSnackbar();
 // Lifecyle
 onMounted(async () => {
   try {
@@ -28,8 +28,9 @@ onMounted(async () => {
       props.giftCode
     );
     instruments.value = availableInstruments;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    showSnackbar(error.message, "error");
   } finally {
     isLoadingAvailableInstruments.value = false;
   }
@@ -45,8 +46,9 @@ const handleSubmit = async () => {
       selectedInstrumentId.value
     );
     emits("submit");
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    showSnackbar(error.message, "error");
   } finally {
     isLoading.value = false;
   }
