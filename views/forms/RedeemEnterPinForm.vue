@@ -15,7 +15,7 @@ const emits = defineEmits<{
 
 const pin = ref("");
 const isLoading = ref(false);
-
+const { showSnackbar } = useSnackbar();
 const handleSubmit = async () => {
   try {
     isLoading.value = true;
@@ -26,8 +26,9 @@ const handleSubmit = async () => {
     if (customerStateInBroker.isCustomer)
       emits("submit", pin.value, RedeemState.ChooseInstruments);
     else emits("submit", pin.value, RedeemState.NoBrokerProfile);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    showSnackbar(error.message, "error");
   } finally {
     isLoading.value = false;
   }

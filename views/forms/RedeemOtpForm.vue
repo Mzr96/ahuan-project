@@ -17,7 +17,7 @@ const otp = ref("");
 const isLoading = ref(false);
 
 const { clockFormat, timer, restart } = useTimer(120);
-
+const { showSnackbar } = useSnackbar();
 watch(otp, (newVal) => newVal.length === 6 && handleSubmit());
 
 const handleSubmit = async () => {
@@ -37,8 +37,9 @@ const handleSubmit = async () => {
     accessToken.value = loginData.accessToken;
 
     emits("submit", otp.value);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    showSnackbar(error.message, "error");
   } finally {
     isLoading.value = false;
   }
