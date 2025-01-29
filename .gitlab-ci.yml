@@ -33,7 +33,6 @@ build-job:
     IMAGE_REGISTRY_BUILD: "$IMAGE_REGISTRY"
   image: $BASE_IMAGE_BUILD
   before_script:
-    - echo  "VITE_API_BASE_URL=${VITE_API_BASE_URL_REDEEM}" > .env.production
     - *before_build
   script:
     - *build

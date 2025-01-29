@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBaseUrl: "http://192.168.100.9:5021",
+       apiBaseUrl: process.env.API_BASE_URL || "http://gift.api.rabinpay.com",
     },
   },
 });
