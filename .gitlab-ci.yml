@@ -12,7 +12,6 @@ stages:
   - rdm_front_deploy
 
 .before_build: &before_build
-  - cat .env.production
   - mkdir -p ~/.docker
   - echo $DOCKER_AUTH_CONFIG > ~/.docker/config.json
 
@@ -33,6 +32,7 @@ build-job:
     IMAGE_REGISTRY_BUILD: "$IMAGE_REGISTRY"
   image: $BASE_IMAGE_BUILD
   before_script:
+    - export API_BASE_URL=${VITE_API_BASE_URL_REDEEM}
     - *before_build
   script:
     - *build
