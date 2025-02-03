@@ -71,4 +71,4 @@ depoly-job:
   needs:
     - build-job
   when:
-    - manual
+    manual
