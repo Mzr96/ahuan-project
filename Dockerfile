@@ -13,6 +13,6 @@ FROM node:16-alpine as production-stage
 COPY --from=build-stage /app/.output  app/.output
 COPY --from=build-stage /app/.nuxt  app/.nuxt
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD ["node", ".output/server/index.mjs"]
+CMD ["node", "/app/.output/server/index.mjs"]
