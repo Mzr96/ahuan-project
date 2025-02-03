@@ -37,9 +37,12 @@ build-job:
   script:
     - *build
   allow_failure: false
-  #only:
-  #  - develop
-  #  - master
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "develop"'
+      when: always
+    - when: manual
+  
+  
 
 depoly-job:
   stage: rdm_front_deploy
@@ -62,8 +65,10 @@ depoly-job:
       ls -la
       docker compose up -d
       EOF
-  #only:
-  #  - master
-  #  - develop
+  only:
+    - master
+    - develop
   needs:
     - build-job
+  when:
+    - manual
