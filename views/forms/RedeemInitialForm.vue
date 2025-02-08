@@ -62,10 +62,11 @@ const formModel = reactive({
 const { showSnackbar } = useSnackbar();
 
 const handleSubmit = async () => {
+  if (isLoading.value) return;
   try {
     isLoading.value = true;
-    const validate = await form.value?.validate();
-    if (!validate?.valid) return;
+    const formValidationResult = await form.value?.validate();
+    if (!formValidationResult?.valid) return;
     await sendOtp(formModel.mobileNumber);
     emits("submit", formModel.mobileNumber, formModel.nationalCode);
 
