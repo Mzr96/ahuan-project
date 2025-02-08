@@ -32,8 +32,8 @@ const stepperSecondItem: RabinStepperHeaderItem = {
 };
 
 const stepperThirdItem: RabinStepperHeaderItem = {
-  value: RedeemState.EnterPin,
-  title: RedeemStateLabel.EnterPin,
+  value: RedeemState.EnterGift,
+  title: RedeemStateLabel.EnterGift,
   compeleteIcon: "mdi-check",
   icon: "mdi-form-textbox-password",
   color: "primary",
@@ -65,7 +65,7 @@ const items = reactive([
 
 const computedItems = computed(() => {
   if (props.activeStep === RedeemState.NoBrokerProfile)
-    return items.filter((item) => item.value !== RedeemState.EnterPin);
+    return items.filter((item) => item.value !== RedeemState.EnterGift);
   else
     return items.filter((item) => item.value !== RedeemState.NoBrokerProfile);
 });

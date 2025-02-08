@@ -17,6 +17,8 @@ const route = useRoute();
 const router = useRouter();
 const theme = useTheme();
 
+useHead({ title: "کارت هدیه" });
+
 const handleTenant = async () => {
   let tenant = LocalStorageService.getItem("tenant", TenantSchema);
   const dsCode = route.query.dsCode as string | undefined;

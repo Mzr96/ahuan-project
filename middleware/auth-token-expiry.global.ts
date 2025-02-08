@@ -9,9 +9,4 @@ export default defineNuxtRouteMiddleware((from, to) => {
     // Conver second to milisecond
     if (tokenClaims.exp * 1000 < Date.now()) accessToken.value = null;
   }
-
-  // Redirect when there is no dsCode or giftCode in query
-  if (!to.query.giftCode?.toString() || !to.query.dsCode?.toString()) {
-    return navigateTo("/scan-gift");
-  }
 });
