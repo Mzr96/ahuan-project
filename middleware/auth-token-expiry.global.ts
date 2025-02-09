@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import type { Token } from "~/types/Token";
 
-export default defineNuxtRouteMiddleware((from, to) => {
+export default defineNuxtRouteMiddleware(() => {
   const accessToken = useCookie("accessToken");
   // Clear token from cookie and clear when it is expired
   if (accessToken.value) {
