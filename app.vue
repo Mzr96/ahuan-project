@@ -11,7 +11,7 @@
 import { useTheme } from "vuetify";
 import LocalStorageService from "~/helpers/localStorageService";
 import { getTenant } from "~/services/tenantServices";
-import { TenantSchema, type Tenant } from "~/utils/validation/tenantSchema";
+import { TenantSchema } from "~/utils/validation/tenantSchema";
 
 const route = useRoute();
 const router = useRouter();
@@ -25,13 +25,16 @@ const handleTenant = async () => {
   //   TODO :: Handle avsence of dsCode in query
   if (!dsCode) {
     // Redirect to error page
+    router.push("/down-time");
   } else if (tenant === null && dsCode) {
     try {
       tenant = await getTenant(dsCode);
       LocalStorageService.setItem("tenant", tenant);
-    } catch (error) {
+    } catch (error: unknown) {
       // Handle error of geting tenant
-      router.push("/scan-gift");
+      console.log(error);
+
+      router.push("/down-time");
     }
   }
   theme.themes.value.light.colors = {
