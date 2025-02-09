@@ -40,20 +40,17 @@ const handleSubmit = async () => {
         را اسکن نمایید. ضمنا تکمیل فرایند ثبت نام در کارگزاری ممکن است تا ۱ روز
         کاری زمان ببرد.
       </p>
+      <p class="mt-8">
+        <NuxtLink class="text-primary" :href="tenant?.registerLink" external
+          >ایجاد حساب کاربری</NuxtLink
+        >
+      </p>
     </div>
     <div class="bottom_nav">
       <VCol>
         <VBtn
-          class="w-100 text-body-2 font-weight-thin"
-          @click="navigateTo(tenant?.registerLink, { external: true })"
-          >ایجاد حساب کاربری</VBtn
-        >
-      </VCol>
-      <VCol>
-        <VBtn
           :loading="isLoading"
           class="w-100 text-body-2 font-weight-thin"
-          variant="text"
           append-icon="mdi-refresh"
           @click="handleSubmit"
           >حساب ایجاد کردم، بررسی مجدد
