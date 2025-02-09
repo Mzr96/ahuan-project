@@ -1,7 +1,7 @@
 <template>
   <VForm
-    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     ref="form"
+    class="d-flex flex-column px-3 pt-1 justify-space-between"
     @submit.prevent="handleSubmit"
   >
     <div class="w-100">
@@ -33,7 +33,7 @@
         />
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol>
         <VBtn
           text="مرحله بعد"

@@ -10,7 +10,6 @@ import { RedeemState } from "~/enums/redeemState";
 import RedeemStepper from "~/views/RedeemStepper.vue";
 
 const route = useRoute();
-
 onMounted(() => {
   const giftCode = route.query.giftCode?.toString() || "";
   const dsCode = route.query.dsCode?.toString() || "";
@@ -84,8 +83,8 @@ const handleEnterGiftFormSubmit = async (
           @submit="handleEnterGiftFormSubmit"
         />
         <RedeemNoBrokerProfileForm
-          :ds-code="loginModel.dsCode"
           v-else-if="currentState === RedeemState.NoBrokerProfile"
+          :ds-code="loginModel.dsCode"
           @submit="setCurrentState(RedeemState.ChooseInstruments)"
         />
         <RedeemSelectInstrumentForm
@@ -100,3 +99,20 @@ const handleEnterGiftFormSubmit = async (
     <RedeemCongrats v-if="currentState === RedeemState.Success" />
   </div>
 </template>
+<style>
+.bottom_nav {
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  height: max-content;
+  max-width: 480px;
+  top: auto;
+  margin: 0 auto;
+  background-color: #fff;
+  z-index: 200;
+  box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
+  padding: 0 12px;
+  border-radius: 6px;
+}
+</style>
