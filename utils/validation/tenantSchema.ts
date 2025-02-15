@@ -9,7 +9,6 @@ const ColorsSchema = z.object({
 });
 
 export const TenantSchema = z.object({
-  id: z.string(),
   colors: ColorsSchema,
   favicon: z.string().url(), // Ensures it's a valid URL
   logo: z.string().url(), // Ensures it's a valid URL
