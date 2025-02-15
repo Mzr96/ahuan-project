@@ -66,10 +66,9 @@ const handleSubmit = async () => {
         </template>
         <VBtn
           v-for="instrument in instruments"
-          :disabled="isLoading"
-          @click="selectedInstrumentId = instrument.id"
-          class="text-center font-weight-bold"
           :key="instrument.id"
+          :disabled="isLoading"
+          class="text-center font-weight-bold"
           :color="
             instrument.id === selectedInstrumentId ? 'primary' : 'primary'
           "
@@ -79,18 +78,19 @@ const handleSubmit = async () => {
           size="large"
           :text="instrument.name"
           rounded="lg"
+          @click="selectedInstrumentId = instrument.id"
         />
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol class="" :cols="12">
         <VBtn
           :loading="isLoading"
           :disabled="!selectedInstrumentId"
-          @click="handleSubmit"
+          class="w-100 text-body-2 font-weight-thin"
           text="مرحله بعد"
           type="submit"
-          class="w-100 text-body-2 font-weight-thin"
+          @click="handleSubmit"
         />
       </VCol>
     </div>

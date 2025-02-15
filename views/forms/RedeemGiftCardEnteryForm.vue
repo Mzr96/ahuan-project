@@ -52,8 +52,8 @@ const handleSubmit = async () => {
 </script>
 <template>
   <VForm
-    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     ref="form"
+    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     @submit.prevent=""
   >
     <div>
@@ -64,8 +64,8 @@ const handleSubmit = async () => {
       </VCol>
       <VCol :cols="12">
         <VTextField
-          label="کد هدیه"
           v-model="giftCode"
+          label="کد هدیه"
           :disabled="isGiftCodeInputDisable"
           :rules="[requiredValidator]"
         />
@@ -92,14 +92,14 @@ const handleSubmit = async () => {
         </div>
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol :cols="12" align-self="end">
         <VBtn
           text="مرحله بعد"
           type="submit"
-          @click="handleSubmit"
           :loading="isLoading"
           class="w-100 text-body-2 font-weight-thin"
+          @click="handleSubmit"
         />
       </VCol>
     </div>

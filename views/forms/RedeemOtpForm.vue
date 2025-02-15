@@ -94,7 +94,7 @@ const handleSubmit = async () => {
         </div>
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol :cols="12" class="d-flex">
         <VBtn
           :disabled="isLoading || otp.length !== 6"
