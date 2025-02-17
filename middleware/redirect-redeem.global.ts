@@ -1,3 +1,5 @@
 export default defineNuxtRouteMiddleware((from) => {
-  if (from.path === "/") return navigateTo("/redeem-gift-card");
+  const query = from.query;
+  if (from.path === "/")
+    return navigateTo({ path: `/redeem-gift-card`, query });
 });
