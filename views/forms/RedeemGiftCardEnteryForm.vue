@@ -75,7 +75,7 @@ const handleSubmit = async () => {
           v-model="pin"
           label="رمز فعال سازی"
           :length="6"
-          :rules="[requiredValidator, lengthValidator(pin, 6)]"
+          :rules="[requiredValidator, lengthValidator(pin, 5)]"
         />
       </VCol>
       <VCol :cols="12" class="py-0">
