@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { VForm } from "vuetify/components";
 import { RedeemState } from "~/enums/redeemState";
 import { isCustomerSignedUpInBroker } from "~/services/customerServices";
 import { validateGift } from "~/services/giftCodeServices";
@@ -10,22 +11,37 @@ interface Props {
 const props = defineProps<Props>();
 
 const emits = defineEmits<{
-  submit: [pin: string, nextState: RedeemState];
+  submit: [pin: string, code: string, nextState: RedeemState];
 }>();
 
+onMounted(() => {
+  if (props.giftCode) {
+    giftCode.value = props.giftCode;
+    isGiftCodeInputDisable.value = true;
+  }
+});
+
 const pin = ref("");
+const giftCode = ref("");
+const isGiftCodeInputDisable = ref(false);
 const isLoading = ref(false);
+const form = ref<VForm>();
+
 const { showSnackbar } = useSnackbar();
+
 const handleSubmit = async () => {
   try {
+    const formValidationResult = await form.value?.validate();
+    if (!formValidationResult?.valid || isLoading.value) return;
     isLoading.value = true;
-    await validateGift(pin.value, props.dsCode, props.giftCode);
+    await validateGift(pin.value, props.dsCode, giftCode.value);
     const customerStateInBroker = await isCustomerSignedUpInBroker(
       props.dsCode
     );
     if (customerStateInBroker.isCustomer)
-      emits("submit", pin.value, RedeemState.ChooseInstruments);
-    else emits("submit", pin.value, RedeemState.NoBrokerProfile);
+      emits("submit", pin.value, giftCode.value, RedeemState.ChooseInstruments);
+    else
+      emits("submit", pin.value, giftCode.value, RedeemState.NoBrokerProfile);
   } catch (error: any) {
     console.error(error);
     showSnackbar(error.message, "error");
@@ -36,23 +52,30 @@ const handleSubmit = async () => {
 </script>
 <template>
   <VForm
-    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     ref="form"
+    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     @submit.prevent=""
   >
     <div>
-      <VCol class="pb-0">
-        <p class="text-body-2 text-center font-weight-bold">
-          رمز فعال‌سازی کارت را وارد کنید.
+      <VCol>
+        <p class="text-body-2 font-weight-bold">
+          کد هدیه و رمز فعال سازی رو وارد کن.
         </p>
       </VCol>
-      <VCol class="pt-0 pb-6" :cols="12">
-        <VOtpInput
-          :loading="isLoading"
+      <VCol :cols="12">
+        <VTextField
+          v-model="giftCode"
+          label="کد هدیه"
+          :disabled="isGiftCodeInputDisable"
+          :rules="[requiredValidator]"
+        />
+      </VCol>
+      <VCol>
+        <VTextField
           v-model="pin"
-          dir="ltr"
+          label="رمز فعال سازی"
           :length="6"
-          base-color="primary"
+          :rules="[requiredValidator, lengthValidator(pin, 5)]"
         />
       </VCol>
       <VCol :cols="12" class="py-0">
@@ -69,14 +92,14 @@ const handleSubmit = async () => {
         </div>
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol :cols="12" align-self="end">
         <VBtn
-          :disabled="isLoading || pin.length !== 6"
           text="مرحله بعد"
           type="submit"
-          @click="handleSubmit"
+          :loading="isLoading"
           class="w-100 text-body-2 font-weight-thin"
+          @click="handleSubmit"
         />
       </VCol>
     </div>

@@ -2,7 +2,9 @@
   <div class="bg-primary-lighten-1 d-flex flex-column py-1">
     <VImg width="120" class="mx-auto" src="/public/images/logo.png" />
     <VImg width="250" class="mx-auto pt-10" src="/public/images/gift.png" />
-    <p class="text-center text-primary font-weight-bold">کارت هدیه سهم آشنا</p>
+    <p class="text-center text-primary font-weight-bold">
+      کارت هدیه {{ tenant?.name }}
+    </p>
   </div>
   <div
     class="bg-primary-lighten-1 text-center d-flex flex-column flex-grow-1 py-4"
@@ -15,7 +17,13 @@
       </p>
     </div>
     <p class="text-caption">
-      در صورت نیاز به پشتیبانی با شماره ۲۴۴۰-۰۲۱ تماس بگیرید.
+      در صورت نیاز به پشتیبانی با شماره {{ tenant?.phoneNumber }} تماس بگیرید.
     </p>
   </div>
 </template>
+<script setup lang="ts">
+import LocalStorageService from "~/helpers/localStorageService";
+import { TenantSchema } from "~/utils/validation/tenantSchema";
+
+const tenant = LocalStorageService.getItem("tenant", TenantSchema);
+</script>

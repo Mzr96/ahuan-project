@@ -1,7 +1,7 @@
 <template>
   <VForm
-    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     ref="form"
+    class="d-flex flex-column px-3 pt-1 justify-space-between"
     @submit.prevent="handleSubmit"
   >
     <div class="w-100">
@@ -33,7 +33,7 @@
         />
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol>
         <VBtn
           text="مرحله بعد"
@@ -62,10 +62,11 @@ const formModel = reactive({
 const { showSnackbar } = useSnackbar();
 
 const handleSubmit = async () => {
+  if (isLoading.value) return;
   try {
     isLoading.value = true;
-    const validate = await form.value?.validate();
-    if (!validate?.valid) return;
+    const formValidationResult = await form.value?.validate();
+    if (!formValidationResult?.valid) return;
     await sendOtp(formModel.mobileNumber);
     emits("submit", formModel.mobileNumber, formModel.nationalCode);
 

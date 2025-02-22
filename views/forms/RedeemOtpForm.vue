@@ -16,7 +16,7 @@ const form = ref<VForm>();
 const otp = ref("");
 const isLoading = ref(false);
 
-const { clockFormat, timer, restart } = useTimer(120);
+const { clockFormat, timer } = useTimer(120);
 const { showSnackbar } = useSnackbar();
 watch(otp, (newVal) => newVal.length === 6 && handleSubmit());
 
@@ -48,9 +48,9 @@ const handleSubmit = async () => {
 
 <template>
   <VForm
-    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
     ref="form"
-    @submit.prevent=""
+    class="h-100 d-flex flex-column px-3 pt-1 justify-space-between"
+    @submit.prevent="handleSubmit"
   >
     <div class="w-100">
       <VCol :cols="12" class="text-center pb-0">
@@ -60,16 +60,16 @@ const handleSubmit = async () => {
         <VBtn
           variant="text"
           density="compact"
-          @click="$emit('previousStep')"
           class="text-body-1 text-decoration-underline"
+          @click="$emit('previousStep')"
         >
           تغیر شماره موبایل
         </VBtn>
       </VCol>
       <VCol :cols="12" class="pt-0">
         <VOtpInput
-          :loading="isLoading"
           v-model="otp"
+          :loading="isLoading"
           dir="ltr"
           :length="6"
           base-color="primary"
@@ -86,15 +86,15 @@ const handleSubmit = async () => {
           <VBtn
             variant="text"
             density="compact"
-            @click="$emit('previousStep')"
             class="text-caption font-weight-black text-decoration-underline"
+            @click="$emit('previousStep')"
           >
             بازگشت به مرحله قبل
           </VBtn>
         </div>
       </VCol>
     </div>
-    <div>
+    <div class="bottom_nav">
       <VCol :cols="12" class="d-flex">
         <VBtn
           :disabled="isLoading || otp.length !== 6"

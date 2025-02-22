@@ -2,7 +2,7 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
-  ssr: true,
+  ssr: false,
   devtools: { enabled: true },
   build: {
     transpile: ["vuetify"],
@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     },
     "@nuxt/fonts",
     "@vueuse/nuxt",
+    "@pinia/nuxt",
   ],
 
   css: ["@styles/styles.scss"],
