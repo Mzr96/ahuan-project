@@ -3,6 +3,7 @@ import type {
   InstrumentDataItem,
   ValidateData,
 } from "~/types/ApiResponse";
+import { InstrumentPortion } from "~/types/Types";
 
 export const getInstruments = async (dsCode: string, giftCode: string) => {
   try {
@@ -23,7 +24,7 @@ export const redeemGift = async (
   pin: string,
   dsCode: string,
   giftCode: string,
-  instrumentId: string
+  instruments: Array<InstrumentPortion>
 ) => {
   try {
     await $api("/api/giftcodes/redeem", {
@@ -33,7 +34,7 @@ export const redeemGift = async (
         dsCode,
         giftCode,
         // TODO : Temporary Hardcoded
-        instruments: [{ id: instrumentId, percentage: 100 }],
+        instruments,
       },
     });
   } catch (error) {
