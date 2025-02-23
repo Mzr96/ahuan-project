@@ -33,6 +33,7 @@ const loginModel = reactive({
   pin: "",
   giftCode: "",
   dsCode: "",
+  giftAmount: 20000000,
 });
 
 const setCurrentState = (state: RedeemState) => (currentState.value = state);
@@ -64,7 +65,7 @@ const handleEnterGiftFormSubmit = async (
     <template v-if="currentState !== RedeemState.Success">
       <RedeemHeader />
       <RedeemStepper :active-step="currentState" />
-      <div class="flex-grow-1">
+      <div>
         <RedeemInitialForm
           v-if="currentState === RedeemState.Authentication"
           @submit="handleInitialFormSubmit"
@@ -92,6 +93,7 @@ const handleEnterGiftFormSubmit = async (
           :pin="loginModel.pin"
           :ds-code="loginModel.dsCode"
           :gift-code="loginModel.giftCode"
+          :gift-amount="loginModel.giftAmount"
           @submit="setCurrentState(RedeemState.Success)"
         />
       </div>
