@@ -1,13 +1,14 @@
 import type {
   DefaultResponse,
-  InstrumentDataItem,
+  GiftCodeDetailsData,
   ValidateData,
 } from "~/types/ApiResponse";
+import { InstrumentPortion } from "~/types/Types";
 
-export const getInstruments = async (dsCode: string, giftCode: string) => {
+export const getGiftCodeDetails = async (dsCode: string, giftCode: string) => {
   try {
-    const response = await $api<DefaultResponse<Array<InstrumentDataItem>>>(
-      "/api/giftcodes/instruments",
+    const response: DefaultResponse<GiftCodeDetailsData> = await $api(
+      "/api/giftcodes/details",
       {
         method: "GET",
         query: { dsCode, giftCode },
@@ -23,7 +24,7 @@ export const redeemGift = async (
   pin: string,
   dsCode: string,
   giftCode: string,
-  instrumentId: string
+  instruments: Array<InstrumentPortion>
 ) => {
   try {
     await $api("/api/giftcodes/redeem", {
@@ -33,7 +34,7 @@ export const redeemGift = async (
         dsCode,
         giftCode,
         // TODO : Temporary Hardcoded
-        instruments: [{ id: instrumentId, percentage: 100 }],
+        instruments,
       },
     });
   } catch (error) {
