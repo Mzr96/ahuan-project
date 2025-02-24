@@ -1,14 +1,14 @@
 import type {
   DefaultResponse,
-  InstrumentDataItem,
+  GiftCodeDetailsData,
   ValidateData,
 } from "~/types/ApiResponse";
 import { InstrumentPortion } from "~/types/Types";
 
-export const getInstruments = async (dsCode: string, giftCode: string) => {
+export const getGiftCodeDetails = async (dsCode: string, giftCode: string) => {
   try {
-    const response = await $api<DefaultResponse<Array<InstrumentDataItem>>>(
-      "/api/giftcodes/instruments",
+    const response: DefaultResponse<GiftCodeDetailsData> = await $api(
+      "/api/giftcodes/details",
       {
         method: "GET",
         query: { dsCode, giftCode },

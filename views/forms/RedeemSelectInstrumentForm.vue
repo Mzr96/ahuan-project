@@ -2,7 +2,7 @@
 import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
 import { getDonutChartInstrumentsConfig } from "~/@core/libs/apex-chart/config";
-import { getInstruments, redeemGift } from "~/services/giftCodeServices";
+import { getGiftCodeDetails, redeemGift } from "~/services/giftCodeServices";
 import type { ApexPieChartColor } from "~/types/components/ApexPieChart";
 import type { CustomInputContent } from "~/types/components/CustomCheckBoxWithIcon";
 import type { InstrumentPortion } from "~/types/Types";
@@ -11,7 +11,6 @@ interface Props {
   pin: string;
   giftCode: string;
   dsCode: string;
-  giftAmount: number;
 }
 
 const props = defineProps<Props>();
@@ -24,33 +23,33 @@ const colors = [
   {
     activeStateBackgroundColor: "#F2FDE2",
     color: "#1B6F14",
-    icon: "mdi-seesaw",
+    icon: "mdi-sprout",
   },
   { activeStateBackgroundColor: "#FFFCDA", color: "#7A670E", icon: "mdi-gold" },
   {
     activeStateBackgroundColor: "#DCF3F5",
     color: "#092D7A",
-    icon: "mdi-certificate-outline",
+    icon: "mdi-chart-line",
   },
 ];
 
 const checkboxesContent: Array<CustomInputContent> = reactive([]);
 const selectedInstruments = ref([]);
-
+const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
 const { showSnackbar } = useSnackbar();
-
+const isOpenRulesModal = ref(false);
 // Lifecyle
 onMounted(async () => {
   try {
     isLoadingAvailableInstruments.value = true;
-    const availableInstruments = await getInstruments(
+    const giftCodeDetails = await getGiftCodeDetails(
       props.dsCode,
       props.giftCode
     );
-
-    availableInstruments.forEach((ins, indx) => {
+    giftAmount.value = giftCodeDetails.amount;
+    giftCodeDetails.instruments.forEach((ins, indx) => {
       const checkboxContent: CustomInputContent = {
         title: ins.bourseAccountCode,
         value: ins.id,
@@ -69,12 +68,11 @@ onMounted(async () => {
 
 const handleSubmit = async () => {
   try {
-    debugger;
     isLoading.value = true;
     const instrumentsPortions: Array<InstrumentPortion> = series.value.map(
       (serie, indx) => ({
         id: selectedInstruments[indx],
-        percentage: (serie / props.giftAmount) * 100,
+        percentage: (serie / giftAmount.value) * 100,
       })
     );
     await redeemGift(
@@ -112,13 +110,13 @@ const series = ref<Array<number>>([]);
 
 watch(selectedInstruments, (newVal) => {
   if (newVal.length > 0) {
-    const eachInstrumentPortion = props.giftAmount / newVal.length;
+    const eachInstrumentPortion = giftAmount.value / newVal.length;
     const newSeries = Array.from({ length: newVal.length }, () =>
       Math.floor(eachInstrumentPortion)
     );
     series.value = newSeries;
     const sumOfSeries = series.value.reduce((pre, cur) => pre + cur, 0);
-    const diff = props.giftAmount - sumOfSeries;
+    const diff = giftAmount.value - sumOfSeries;
     series.value[0] += diff;
   } else {
     series.value.pop();
@@ -128,7 +126,7 @@ watch(selectedInstruments, (newVal) => {
 <template>
   <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
     <div>
-      <VCol :cols="12" class="font-weight-bold">
+      <VCol :cols="12" class="d-flex font-weight-bold justify-space-between">
         <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
       </VCol>
       <VCol :cols="12" class="d-flex flex-column available-instruments">

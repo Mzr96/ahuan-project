@@ -23,6 +23,12 @@ export interface InstrumentDataItem {
   maxCode: string;
   bourseAccountCode: string;
   onlineBourseAccountCode: string;
+  description?: string;
+}
+
+export interface GiftCodeDetailsData {
+  amount: number;
+  instruments: Array<InstrumentDataItem>;
 }
 
 export interface ValidateData {
