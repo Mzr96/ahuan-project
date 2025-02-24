@@ -1,9 +1,7 @@
 <template>
   <VApp>
     <NuxtLayout>
-      <div class="rcontainer">
-        <NuxtPage />
-      </div>
+      <NuxtPage />
     </NuxtLayout>
   </VApp>
 </template>
@@ -47,12 +45,4 @@ const handleTenant = async () => {
 };
 await handleTenant();
 </script>
-<style>
-.rcontainer {
-  max-width: 480px !important;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #fff !important;
-  height: 100vh;
-}
-</style>
+<style></style>
