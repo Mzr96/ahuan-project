@@ -22,6 +22,9 @@
   </div>
 </template>
 <script setup lang="ts">
+definePageMeta({
+  layout: false,
+});
 import LocalStorageService from "~/helpers/localStorageService";
 import { TenantSchema } from "~/utils/validation/tenantSchema";
 
