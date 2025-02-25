@@ -71,7 +71,7 @@ const handleSubmit = async () => {
     isLoading.value = true;
     const instrumentsPortions: Array<InstrumentPortion> = series.value.map(
       (serie, indx) => ({
-        id: selectedInstruments[indx],
+        id: selectedInstruments.value[indx],
         percentage: (serie / giftAmount.value) * 100,
       })
     );
