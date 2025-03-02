@@ -20,9 +20,9 @@ onMounted(() => {
   const accessToken = useCookie("accessToken");
   // if there is no accessToken in cookie go to authentication step
   if (!accessToken.value) {
-    setCurrentState(RedeemState.Authentication);
+    setCurrentState(RedeemState.Success);
   } else {
-    setCurrentState(RedeemState.EnterGift);
+    setCurrentState(RedeemState.Success);
   }
 });
 
