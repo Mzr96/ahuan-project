@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import LocalStorageService from "~/helpers/localStorageService";
 import { isCustomerSignedUpInBroker } from "~/services/customerServices";
-import { TenantSchema } from "~/utils/validation/tenantSchema";
 
 interface Props {
   dsCode: string;
@@ -11,10 +9,11 @@ const emits = defineEmits<{
   submit: [];
 }>();
 
+const tenantStore = useTenantStore();
+
 const isLoading = ref(false);
 const { showSnackbar } = useSnackbar();
 
-const tenant = LocalStorageService.getItem("tenant", TenantSchema);
 const handleSubmit = async () => {
   try {
     isLoading.value = true;
@@ -33,7 +32,7 @@ const handleSubmit = async () => {
     <div class="text-center">
       <VIcon icon=" mdi-alert-circle-outline mb-6" size="58" color="warning" />
       <p class="text-body-1 font-weight-bold mb-8">
-        شما در {{ tenant?.name }} حساب کاربری ایجاد نکرده‌اید!
+        شما در {{ tenantStore.tenant?.name }} حساب کاربری ایجاد نکرده‌اید!
       </p>
       <p class="text-caption">
         لطفا بعد از ایجاد حساب کاربری برای نهایی سازی هدیه خود مجددا کارت هدیه
@@ -41,7 +40,10 @@ const handleSubmit = async () => {
         کاری زمان ببرد.
       </p>
       <p class="mt-8">
-        <NuxtLink class="text-primary" :href="tenant?.registerLink" external
+        <NuxtLink
+          class="text-primary"
+          :href="tenantStore.tenant?.registerLink"
+          external
           >ایجاد حساب کاربری</NuxtLink
         >
       </p>
