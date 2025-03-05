@@ -4,7 +4,7 @@
     style="height: 100vh"
   >
     <div class="d-flex flex-column py-1">
-      <VImg width="120" class="mx-auto" :src="tenant?.logo" />
+      <VImg width="120" class="mx-auto" :src="tenantStore.tenant?.logo" />
       <div class="pt-10 position-relative">
         <DotLottieVue
           class="congrats-background"
@@ -16,7 +16,7 @@
         <VImg width="250" class="mx-auto" src="/public/images/gift.png" />
       </div>
       <p class="text-center text-primary font-weight-bold">
-        کارت هدیه {{ tenant?.name }}
+        کارت هدیه {{ tenantStore.tenant?.name }}
       </p>
     </div>
     <div
@@ -26,11 +26,12 @@
         <h3 class="text-primary text-h4 font-weight-bold py-6">مبارک باشه!</h3>
         <p class="text-body-1">
           هدیه شما با موفقیت براتون ثبت شد. نماد انتخابی شما طی ۲ روز کاری آینده
-          داخل حساب کاربری شما در کارگزاری سهم آشنا اضافه خواهد شد.
+          داخل حساب کاربری شما در {{ tenantStore.tenant?.name }} اضافه خواهد شد.
         </p>
       </div>
       <p class="text-caption">
-        در صورت نیاز به پشتیبانی با شماره {{ tenant?.phoneNumber }} تماس بگیرید.
+        در صورت نیاز به پشتیبانی با شماره
+        {{ tenantStore.tenant?.phoneNumber }} تماس بگیرید.
       </p>
     </div>
   </div>
@@ -40,10 +41,7 @@ definePageMeta({
   layout: false,
 });
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
-import LocalStorageService from "~/helpers/localStorageService";
-import { TenantSchema } from "~/utils/validation/tenantSchema";
-
-const tenant = LocalStorageService.getItem("tenant", TenantSchema);
+const tenantStore = useTenantStore();
 </script>
 <style>
 .congrats-background {
