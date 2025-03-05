@@ -26,7 +26,7 @@
         <h3 class="text-primary text-h4 font-weight-bold py-6">مبارک باشه!</h3>
         <p class="text-body-1">
           هدیه شما با موفقیت براتون ثبت شد. نماد انتخابی شما طی ۲ روز کاری آینده
-          داخل حساب کاربری شما در کارگزاری سهم آشنا اضافه خواهد شد.
+          داخل حساب کاربری شما در {{ tenantStore.tenant?.name }} اضافه خواهد شد.
         </p>
       </div>
       <p class="text-caption">
