@@ -8,6 +8,7 @@ import RedeemCongrats from "~/views/redeem/RedeemCongrats.vue";
 import RedeemHeader from "~/views/redeem/RedeemHeader.vue";
 import { RedeemState } from "~/enums/redeemState";
 import RedeemStepper from "~/views/RedeemStepper.vue";
+import { RegistertionState } from "~/enums/registerationState";
 
 const route = useRoute();
 onMounted(() => {
@@ -34,6 +35,7 @@ const loginModel = reactive({
   giftCode: "",
   dsCode: "",
   giftAmount: 20000000,
+  registarationStatus: RegistertionState.NotRegistered,
 });
 
 const setCurrentState = (state: RedeemState) => (currentState.value = state);
@@ -52,11 +54,16 @@ const hadleOtpFormSubmit = () => setCurrentState(RedeemState.EnterGift);
 const handleEnterGiftFormSubmit = async (
   pin: string,
   code: string,
-  nextState: RedeemState
+  registerationState: RegistertionState
 ) => {
   loginModel.pin = pin;
   loginModel.giftCode = code;
-  setCurrentState(nextState);
+  loginModel.registarationStatus = registerationState;
+  if (loginModel.registarationStatus === RegistertionState.Registered) {
+    setCurrentState(RedeemState.ChooseInstruments);
+  } else {
+    setCurrentState(RedeemState.NoBrokerProfile);
+  }
 };
 </script>
 
@@ -86,6 +93,7 @@ const handleEnterGiftFormSubmit = async (
         <RedeemNoBrokerProfileForm
           v-else-if="currentState === RedeemState.NoBrokerProfile"
           :ds-code="loginModel.dsCode"
+          :registeration-state="loginModel.registarationStatus"
           @submit="setCurrentState(RedeemState.ChooseInstruments)"
         />
         <RedeemSelectInstrumentForm
