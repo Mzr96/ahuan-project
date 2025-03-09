@@ -13,6 +13,13 @@ interface Props {
   dsCode: string;
 }
 
+interface instrumentDescriptionModalContent {
+  title: string;
+  descriptin: string;
+  icon: string;
+  color: string;
+}
+
 const props = defineProps<Props>();
 
 const emits = defineEmits<{
@@ -34,12 +41,14 @@ const colors = [
 ];
 
 const checkboxesContent: Array<CustomInputContent> = reactive([]);
+const instrumentsDescriptionModalContent: Array<instrumentDescriptionModalContent> =
+  reactive([]);
 const selectedInstruments = ref([]);
 const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
+const isDetailModalVisible = ref(false);
 const { showSnackbar } = useSnackbar();
-const isOpenRulesModal = ref(false);
 // Lifecyle
 onMounted(async () => {
   try {
@@ -56,6 +65,14 @@ onMounted(async () => {
         subtitle: ins.name,
         ...colors[indx],
       };
+      const descriptionModalContent: instrumentDescriptionModalContent = {
+        title: ins.bourseAccountCode,
+        descriptin:
+          "لورم ایپسوم و چرت و پرت در واقع لورم ایپسوم خودساز اینجا داریم",
+        icon: colors[indx].icon,
+        color: colors[indx].color,
+      };
+      instrumentsDescriptionModalContent.push(descriptionModalContent);
       checkboxesContent.push(checkboxContent);
     });
   } catch (error: any) {
@@ -124,10 +141,30 @@ watch(selectedInstruments, (newVal) => {
 });
 </script>
 <template>
+  <RabinModal v-model="isDetailModalVisible">
+    <div
+      v-for="(ins, indx) in instrumentsDescriptionModalContent"
+      :key="indx"
+      class="mb-10"
+    >
+      <div class="d-flex align-center ga-1 mb-2">
+        <VIcon :color="ins.color" size="large">{{ ins.icon }}</VIcon>
+        <span class="pt-1 text-body-1 font-weight-bold">{{ ins.title }}</span>
+      </div>
+      <p class="text-body-2 text-justify">{{ ins.descriptin }}</p>
+    </div>
+  </RabinModal>
   <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
     <div>
       <VCol :cols="12" class="d-flex font-weight-bold justify-space-between">
-        <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
+        <p>هدیه خود را انتخاب کنید:</p>
+        <VBtn
+          size="small"
+          append-icon="mdi-chevron-left"
+          variant="text"
+          @click="isDetailModalVisible = true"
+          >اطلاعات صندوق‌ها</VBtn
+        >
       </VCol>
       <VCol :cols="12" class="d-flex flex-column available-instruments">
         <template v-if="isLoadingAvailableInstruments">
