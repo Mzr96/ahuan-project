@@ -1,3 +1,5 @@
+import type { RegistertionState } from "~/enums/registerationState";
+
 export interface DefaultResponse<TData> {
   data: TData;
   isSuccess: boolean;
@@ -36,5 +38,5 @@ export interface ValidateData {
 }
 
 export interface IsSignUpData {
-  isCustomer: boolean;
+  customerRegistrationStatus: RegistertionState;
 }

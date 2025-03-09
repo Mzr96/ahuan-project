@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VForm } from "vuetify/components";
-import { RedeemState } from "~/enums/redeemState";
+import { RegistertionState } from "~/enums/registerationState";
 import { isCustomerSignedUpInBroker } from "~/services/customerServices";
 import { validateGift } from "~/services/giftCodeServices";
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const emits = defineEmits<{
-  submit: [pin: string, code: string, nextState: RedeemState];
+  submit: [pin: string, code: string, registarationStatus: RegistertionState];
 }>();
 
 onMounted(() => {
@@ -38,10 +38,13 @@ const handleSubmit = async () => {
     const customerStateInBroker = await isCustomerSignedUpInBroker(
       props.dsCode
     );
-    if (customerStateInBroker.isCustomer)
-      emits("submit", pin.value, giftCode.value, RedeemState.ChooseInstruments);
-    else
-      emits("submit", pin.value, giftCode.value, RedeemState.NoBrokerProfile);
+
+    emits(
+      "submit",
+      pin.value,
+      giftCode.value,
+      customerStateInBroker.customerRegistrationStatus
+    );
   } catch (error: any) {
     console.error(error);
     showSnackbar(error.message, "error");

@@ -15,6 +15,7 @@ export const TenantSchema = z.object({
   name: z.string(),
   phoneNumber: z.string(),
   registerLink: z.string().url(), // Ensures it's a valid URL
+  onlineWebsite: z.string().url(), // Ensures it's a valid URL
 });
 
 export type Tenant = z.infer<typeof TenantSchema>;
