@@ -1,5 +1,5 @@
 export enum RegistertionState {
-  Registered,
+  Registered = 1,
   NotRegistered,
   PendToConfirmContract,
   PendForSiteUser,
