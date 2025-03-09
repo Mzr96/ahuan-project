@@ -10,8 +10,8 @@
           class="congrats-background"
           autoplay
           loop
-          :speed="1.5"
-          src="https://lottie.host/ef7ee59f-b979-43b8-a3ca-09ab8f6f611a/ZwGBUqqbBe.lottie"
+          :speed="1.3"
+          src="/images/congratsGif.lottie"
         />
         <VImg width="250" class="mx-auto" src="/public/images/gift.png" />
       </div>
@@ -37,9 +37,6 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({
-  layout: false,
-});
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 const tenantStore = useTenantStore();
 </script>
@@ -49,6 +46,9 @@ const tenantStore = useTenantStore();
   top: 0;
   left: 0;
   width: 100%;
+  height: auto;
+  transform: scale(1.5);
+  transform-origin: center center;
   z-index: 0;
 }
 </style>
