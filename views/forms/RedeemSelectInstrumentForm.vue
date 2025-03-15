@@ -5,7 +5,11 @@ import { getDonutChartInstrumentsConfig } from "~/@core/libs/apex-chart/config";
 import { getGiftCodeDetails, redeemGift } from "~/services/giftCodeServices";
 import type { ApexPieChartColor } from "~/types/components/ApexPieChart";
 import type { CustomInputContent } from "~/types/components/CustomCheckBoxWithIcon";
-import type { InstrumentPortion } from "~/types/Types";
+import type {
+  InstrumentDetailModalContent,
+  InstrumentPortion,
+} from "~/types/Types";
+import InstrumentsDetailModal from "../modals/InstrumentsDetailModal.vue";
 
 interface Props {
   pin: string;
@@ -34,12 +38,17 @@ const colors = [
 ];
 
 const checkboxesContent: Array<CustomInputContent> = reactive([]);
+const instrumentsDetailModalContent: Array<InstrumentDetailModalContent> =
+  reactive([]);
 const selectedInstruments = ref([]);
 const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
+const doesInstrumentsHaveDescription = computed(() =>
+  instrumentsDetailModalContent.every((i) => i.descriptin !== null)
+);
 const { showSnackbar } = useSnackbar();
-const isOpenRulesModal = ref(false);
+
 // Lifecyle
 onMounted(async () => {
   try {
@@ -56,6 +65,13 @@ onMounted(async () => {
         subtitle: ins.name,
         ...colors[indx],
       };
+      const descriptionModalContent: InstrumentDetailModalContent = {
+        title: ins.bourseAccountCode,
+        descriptin: ins.description,
+        icon: colors[indx].icon,
+        color: colors[indx].color,
+      };
+      instrumentsDetailModalContent.push(descriptionModalContent);
       checkboxesContent.push(checkboxContent);
     });
   } catch (error: any) {
@@ -127,12 +143,20 @@ watch(selectedInstruments, (newVal) => {
   <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
     <div>
       <VCol :cols="12" class="d-flex font-weight-bold justify-space-between">
-        <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
+        <p>هدیه خود را انتخاب کنید:</p>
+        <InstrumentsDetailModal
+          v-if="doesInstrumentsHaveDescription"
+          :modal-content="instrumentsDetailModalContent"
+        />
       </VCol>
       <VCol :cols="12" class="d-flex flex-column available-instruments">
-        <template v-if="isLoadingAvailableInstruments">
-          <VSkeletonLoader v-for="n in 3" :key="n" type="card" />
-        </template>
+        <!-- Start : Skeleton for lazy load -->
+        <VRow v-if="isLoadingAvailableInstruments">
+          <VCol v-for="n in 3" :key="n" :cols="4">
+            <VSkeletonLoader type="image" />
+          </VCol>
+        </VRow>
+        <!-- End : Skeleton for lazy load -->
         <CustomCheckboxWithIcon
           v-else
           v-model:selected-checkbox="selectedInstruments"
