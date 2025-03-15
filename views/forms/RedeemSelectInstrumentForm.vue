@@ -5,19 +5,16 @@ import { getDonutChartInstrumentsConfig } from "~/@core/libs/apex-chart/config";
 import { getGiftCodeDetails, redeemGift } from "~/services/giftCodeServices";
 import type { ApexPieChartColor } from "~/types/components/ApexPieChart";
 import type { CustomInputContent } from "~/types/components/CustomCheckBoxWithIcon";
-import type { InstrumentPortion } from "~/types/Types";
+import type {
+  InstrumentDetailModalContent,
+  InstrumentPortion,
+} from "~/types/Types";
+import InstrumentsDetailModal from "../modals/InstrumentsDetailModal.vue";
 
 interface Props {
   pin: string;
   giftCode: string;
   dsCode: string;
-}
-
-interface instrumentDescriptionModalContent {
-  title: string;
-  descriptin: string;
-  icon: string;
-  color: string;
 }
 
 const props = defineProps<Props>();
@@ -41,14 +38,17 @@ const colors = [
 ];
 
 const checkboxesContent: Array<CustomInputContent> = reactive([]);
-const instrumentsDescriptionModalContent: Array<instrumentDescriptionModalContent> =
+const instrumentsDetailModalContent: Array<InstrumentDetailModalContent> =
   reactive([]);
 const selectedInstruments = ref([]);
 const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
-const isDetailModalVisible = ref(false);
+const doesInstrumentsHaveDescription = computed(() =>
+  instrumentsDetailModalContent.every((i) => i.descriptin !== null)
+);
 const { showSnackbar } = useSnackbar();
+
 // Lifecyle
 onMounted(async () => {
   try {
@@ -65,14 +65,13 @@ onMounted(async () => {
         subtitle: ins.name,
         ...colors[indx],
       };
-      const descriptionModalContent: instrumentDescriptionModalContent = {
+      const descriptionModalContent: InstrumentDetailModalContent = {
         title: ins.bourseAccountCode,
-        descriptin:
-          "لورم ایپسوم و چرت و پرت در واقع لورم ایپسوم خودساز اینجا داریم",
+        descriptin: ins.description,
         icon: colors[indx].icon,
         color: colors[indx].color,
       };
-      instrumentsDescriptionModalContent.push(descriptionModalContent);
+      instrumentsDetailModalContent.push(descriptionModalContent);
       checkboxesContent.push(checkboxContent);
     });
   } catch (error: any) {
@@ -141,35 +140,23 @@ watch(selectedInstruments, (newVal) => {
 });
 </script>
 <template>
-  <RabinModal v-model="isDetailModalVisible">
-    <div
-      v-for="(ins, indx) in instrumentsDescriptionModalContent"
-      :key="indx"
-      class="mb-10"
-    >
-      <div class="d-flex align-center ga-1 mb-2">
-        <VIcon :color="ins.color" size="large">{{ ins.icon }}</VIcon>
-        <span class="pt-1 text-body-1 font-weight-bold">{{ ins.title }}</span>
-      </div>
-      <p class="text-body-2 text-justify">{{ ins.descriptin }}</p>
-    </div>
-  </RabinModal>
   <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
     <div>
       <VCol :cols="12" class="d-flex font-weight-bold justify-space-between">
         <p>هدیه خود را انتخاب کنید:</p>
-        <VBtn
-          size="small"
-          append-icon="mdi-chevron-left"
-          variant="text"
-          @click="isDetailModalVisible = true"
-          >اطلاعات صندوق‌ها</VBtn
-        >
+        <InstrumentsDetailModal
+          v-if="doesInstrumentsHaveDescription"
+          :modal-content="instrumentsDetailModalContent"
+        />
       </VCol>
       <VCol :cols="12" class="d-flex flex-column available-instruments">
-        <template v-if="isLoadingAvailableInstruments">
-          <VSkeletonLoader v-for="n in 3" :key="n" type="card" />
-        </template>
+        <!-- Start : Skeleton for lazy load -->
+        <VRow v-if="isLoadingAvailableInstruments">
+          <VCol v-for="n in 3" :key="n" :cols="4">
+            <VSkeletonLoader type="image" />
+          </VCol>
+        </VRow>
+        <!-- End : Skeleton for lazy load -->
         <CustomCheckboxWithIcon
           v-else
           v-model:selected-checkbox="selectedInstruments"
