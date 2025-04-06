@@ -2,3 +2,24 @@ body {
   font-family: "Vazirmatn-FD";
   // font-family: "IRANSans";
 }
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  width: 100%;
+  min-height: 100dvh;
+  background-color: #fff;
+  position: relative;
+  margin: 0 auto;
+
+  .layout__main-content {
+    flex-grow: 1;
+  }
+
+  &.layout-with-footer {
+    .layout__main-content {
+      padding-bottom: 84px;
+    }
+  }
+}
