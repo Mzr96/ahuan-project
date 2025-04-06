@@ -19,9 +19,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const emits = defineEmits<{
-  submit: [];
-}>();
 // Order of the list does matter
 const colors = [
   {
@@ -97,7 +94,8 @@ const handleSubmit = async () => {
       props.giftCode,
       instrumentsPortions
     );
-    emits("submit");
+    // Redirect to congrats page on successfull redeem
+    navigateTo({ path: "/redeem-congrats", query: { dsCode: props.dsCode } });
   } catch (error: any) {
     console.error(error);
     showSnackbar(error.message, "error");
