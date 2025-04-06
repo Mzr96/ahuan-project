@@ -52,7 +52,7 @@ const fillErrorMessage = () => {
     errorMessage.desc = `ثبت نام شما با موفقیت انجام شده است و
      در این مرحله باید داخل سامانه آنلاین کارگزاری وارد شده و قراردادها را
       امضا نمایید. نام کاربری و رمز عبور سامانه برای شما پیامک شده است. `;
-    errorMessage.link = tenantStore.tenant?.onlineWebsite || "";
+    errorMessage.link = tenantStore.tenant?.onlineWebSite || "";
     errorMessage.linkTitle = "سامانه آنلاین کارگزاری";
   } else if (registerationState === RegistertionState.PendForSiteUser) {
     errorMessage.title = `ثبت‌نام شما کامل انجام نشده است`;
