@@ -10,7 +10,7 @@ export enum RedeemState {
 export enum RedeemStateLabel {
   Authentication = "ورود",
   Otp = "ارسال کد پیامکی",
-  EnterGift = "تائید کد و رمز فعال سازی",
+  EnterGift = "کد و رمز فعال سازی",
   NoBrokerProfile = "عضویت در کارگزاری",
   ChooseInstruments = "انتخاب نماد",
   Success = "موفق",
