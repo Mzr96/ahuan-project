@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary-lighten-1 h-100 d-flex flex-column">
+  <div class="bg-primary-lighten-1 h-100 d-flex flex-column overflow-hidden">
     <div class="d-flex flex-column py-1">
       <VImg width="120" class="mx-auto" :src="tenantStore.tenant?.logo" />
       <div class="pt-10 position-relative">
