@@ -44,8 +44,10 @@ const selectedInstruments = ref([]);
 const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
-const doesInstrumentsHaveDescription = computed(() =>
-  instrumentsDetailModalContent.every((i) => i.descriptin !== null)
+const doesInstrumentsHaveDescription = computed(
+  () =>
+    instrumentsDetailModalContent.length !== 0 &&
+    instrumentsDetailModalContent.every((i) => i.descriptin !== null)
 );
 const { showSnackbar } = useSnackbar();
 
