@@ -45,9 +45,9 @@ const updateSelectedOption = (value: string[] | null) => {
               : ''
           }`,
         }"
-        class="custom-input custom-checkbox-icon rounded-lg cursor-pointer py-4"
+        class="custom-input custom-checkbox-icon rounded-lg cursor-pointer py-4 h-100"
       >
-        <div class="d-flex flex-column align-center text-center">
+        <div class="d-flex flex-column align-center text-center px-2">
           <VIcon class="text-high-emphasis mb-3" size="36">{{
             item.icon
           }}</VIcon>
@@ -67,7 +67,7 @@ const updateSelectedOption = (value: string[] | null) => {
             </template>
           </VCheckbox>
           <p
-            class="clamp-text mb-0"
+            class="clamp-text mb-0 text-wrap"
             :style="{ fontSize: '10px', color: `${item.color}` }"
           >
             {{ item.subtitle }}
