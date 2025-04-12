@@ -26,10 +26,11 @@
           داخل حساب کاربری شما در {{ tenantStore.tenant?.name }} اضافه خواهد شد.
         </p>
       </div>
-      <p class="text-caption">
+      <p class="text-caption mb-2">
         در صورت نیاز به پشتیبانی با شماره
         {{ tenantStore.tenant?.phoneNumber }} تماس بگیرید.
       </p>
+      <PoweredBy />
     </div>
   </div>
 </template>
