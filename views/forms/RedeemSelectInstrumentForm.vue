@@ -10,6 +10,7 @@ import type {
   InstrumentPortion,
 } from "~/types/Types";
 import InstrumentsDetailModal from "../modals/InstrumentsDetailModal.vue";
+import { InstrumentCategory } from "~/enums/InstrumentCategory";
 
 interface Props {
   pin: string;
@@ -25,19 +26,26 @@ const colors = [
     activeStateBackgroundColor: "#F2FDE2",
     color: "#1B6F14",
     icon: "mdi-sprout",
-    categories: [1, 5],
+    categories: [
+      InstrumentCategory.FixedIncomeFund,
+      InstrumentCategory.OtherFund,
+    ],
   },
   {
     activeStateBackgroundColor: "#FFFCDA",
     color: "#7A670E",
     icon: "mdi-gold",
-    categories: [0],
+    categories: [InstrumentCategory.GoldFund, InstrumentCategory.SilverFund],
   },
   {
     activeStateBackgroundColor: "#DCF3F5",
     color: "#092D7A",
     icon: "mdi-chart-line",
-    categories: [1, 5],
+    categories: [
+      InstrumentCategory.EquityFund,
+      InstrumentCategory.LeveragedFund,
+      InstrumentCategory.OtherStocks,
+    ],
   },
 ];
 
