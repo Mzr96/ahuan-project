@@ -10,6 +10,7 @@ import type {
   InstrumentPortion,
 } from "~/types/Types";
 import InstrumentsDetailModal from "../modals/InstrumentsDetailModal.vue";
+import { InstrumentCategory } from "~/enums/InstrumentCategory";
 
 interface Props {
   pin: string;
@@ -25,12 +26,26 @@ const colors = [
     activeStateBackgroundColor: "#F2FDE2",
     color: "#1B6F14",
     icon: "mdi-sprout",
+    categories: [
+      InstrumentCategory.FixedIncomeFund,
+      InstrumentCategory.OtherFund,
+    ],
   },
-  { activeStateBackgroundColor: "#FFFCDA", color: "#7A670E", icon: "mdi-gold" },
+  {
+    activeStateBackgroundColor: "#FFFCDA",
+    color: "#7A670E",
+    icon: "mdi-gold",
+    categories: [InstrumentCategory.GoldFund, InstrumentCategory.SilverFund],
+  },
   {
     activeStateBackgroundColor: "#DCF3F5",
     color: "#092D7A",
     icon: "mdi-chart-line",
+    categories: [
+      InstrumentCategory.EquityFund,
+      InstrumentCategory.LeveragedFund,
+      InstrumentCategory.OtherStocks,
+    ],
   },
 ];
 
@@ -57,18 +72,22 @@ onMounted(async () => {
       props.giftCode
     );
     giftAmount.value = giftCodeDetails.amount;
-    giftCodeDetails.instruments.forEach((ins, indx) => {
+    giftCodeDetails.instruments.forEach((ins) => {
+      const selectedColor =
+        colors.filter((item) => item.categories.includes(ins.category))[0] ||
+        colors[0];
       const checkboxContent: CustomInputContent = {
         title: ins.bourseAccountCode,
         value: ins.id,
         subtitle: ins.name,
-        ...colors[indx],
+        ...selectedColor,
       };
+
       const descriptionModalContent: InstrumentDetailModalContent = {
         title: ins.bourseAccountCode,
         descriptin: ins.description,
-        icon: colors[indx].icon,
-        color: colors[indx].color,
+        icon: selectedColor.icon,
+        color: selectedColor.color,
       };
       instrumentsDetailModalContent.push(descriptionModalContent);
       checkboxesContent.push(checkboxContent);
