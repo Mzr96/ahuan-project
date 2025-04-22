@@ -1,3 +1,4 @@
+import type { InstrumentCategory } from "~/enums/InstrumentCategory";
 import type { RegistertionState } from "~/enums/registerationState";
 
 export interface DefaultResponse<TData> {
@@ -26,6 +27,7 @@ export interface InstrumentDataItem {
   bourseAccountCode: string;
   onlineBourseAccountCode: string;
   description?: string;
+  category: InstrumentCategory;
 }
 
 export interface GiftCodeDetailsData {

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="bg-primary-lighten-1 pb-0 d-flex flex-column"
-    style="height: 100vh"
-  >
+  <div class="bg-primary-lighten-1 h-100 d-flex flex-column overflow-hidden">
     <div class="d-flex flex-column py-1">
       <VImg width="120" class="mx-auto" :src="tenantStore.tenant?.logo" />
       <div class="pt-10 position-relative">
@@ -29,14 +26,18 @@
           داخل حساب کاربری شما در {{ tenantStore.tenant?.name }} اضافه خواهد شد.
         </p>
       </div>
-      <p class="text-caption">
+      <p class="text-caption mb-2">
         در صورت نیاز به پشتیبانی با شماره
         {{ tenantStore.tenant?.phoneNumber }} تماس بگیرید.
       </p>
+      <PoweredBy />
     </div>
   </div>
 </template>
 <script setup lang="ts">
+definePageMeta({
+  layout: "without-footer",
+});
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 const tenantStore = useTenantStore();
 </script>

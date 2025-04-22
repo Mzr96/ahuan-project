@@ -5,7 +5,12 @@ import { getDonutChartInstrumentsConfig } from "~/@core/libs/apex-chart/config";
 import { getGiftCodeDetails, redeemGift } from "~/services/giftCodeServices";
 import type { ApexPieChartColor } from "~/types/components/ApexPieChart";
 import type { CustomInputContent } from "~/types/components/CustomCheckBoxWithIcon";
-import type { InstrumentPortion } from "~/types/Types";
+import type {
+  InstrumentDetailModalContent,
+  InstrumentPortion,
+} from "~/types/Types";
+import InstrumentsDetailModal from "../modals/InstrumentsDetailModal.vue";
+import { InstrumentCategory } from "~/enums/InstrumentCategory";
 
 interface Props {
   pin: string;
@@ -15,31 +20,49 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const emits = defineEmits<{
-  submit: [];
-}>();
 // Order of the list does matter
 const colors = [
   {
     activeStateBackgroundColor: "#F2FDE2",
     color: "#1B6F14",
     icon: "mdi-sprout",
+    categories: [
+      InstrumentCategory.FixedIncomeFund,
+      InstrumentCategory.OtherFund,
+    ],
   },
-  { activeStateBackgroundColor: "#FFFCDA", color: "#7A670E", icon: "mdi-gold" },
+  {
+    activeStateBackgroundColor: "#FFFCDA",
+    color: "#7A670E",
+    icon: "mdi-gold",
+    categories: [InstrumentCategory.GoldFund, InstrumentCategory.SilverFund],
+  },
   {
     activeStateBackgroundColor: "#DCF3F5",
     color: "#092D7A",
     icon: "mdi-chart-line",
+    categories: [
+      InstrumentCategory.EquityFund,
+      InstrumentCategory.LeveragedFund,
+      InstrumentCategory.OtherStocks,
+    ],
   },
 ];
 
 const checkboxesContent: Array<CustomInputContent> = reactive([]);
+const instrumentsDetailModalContent: Array<InstrumentDetailModalContent> =
+  reactive([]);
 const selectedInstruments = ref([]);
 const giftAmount = ref(0);
 const isLoading = ref(false);
 const isLoadingAvailableInstruments = ref(false);
+const doesInstrumentsHaveDescription = computed(
+  () =>
+    instrumentsDetailModalContent.length !== 0 &&
+    instrumentsDetailModalContent.every((i) => i.descriptin !== null)
+);
 const { showSnackbar } = useSnackbar();
-const isOpenRulesModal = ref(false);
+
 // Lifecyle
 onMounted(async () => {
   try {
@@ -49,13 +72,24 @@ onMounted(async () => {
       props.giftCode
     );
     giftAmount.value = giftCodeDetails.amount;
-    giftCodeDetails.instruments.forEach((ins, indx) => {
+    giftCodeDetails.instruments.forEach((ins) => {
+      const selectedColor =
+        colors.filter((item) => item.categories.includes(ins.category))[0] ||
+        colors[0];
       const checkboxContent: CustomInputContent = {
         title: ins.bourseAccountCode,
         value: ins.id,
         subtitle: ins.name,
-        ...colors[indx],
+        ...selectedColor,
       };
+
+      const descriptionModalContent: InstrumentDetailModalContent = {
+        title: ins.bourseAccountCode,
+        descriptin: ins.description,
+        icon: selectedColor.icon,
+        color: selectedColor.color,
+      };
+      instrumentsDetailModalContent.push(descriptionModalContent);
       checkboxesContent.push(checkboxContent);
     });
   } catch (error: any) {
@@ -81,7 +115,8 @@ const handleSubmit = async () => {
       props.giftCode,
       instrumentsPortions
     );
-    emits("submit");
+    // Redirect to congrats page on successfull redeem
+    navigateTo({ path: "/redeem-congrats", query: { dsCode: props.dsCode } });
   } catch (error: any) {
     console.error(error);
     showSnackbar(error.message, "error");
@@ -127,12 +162,20 @@ watch(selectedInstruments, (newVal) => {
   <div class="h-100 d-flex flex-column px-3 pt-1 justify-space-between">
     <div>
       <VCol :cols="12" class="d-flex font-weight-bold justify-space-between">
-        <p>هدیه خود را از بین گزینه های زیر انتخاب کنید:</p>
+        <p>هدیه خود را انتخاب کنید:</p>
+        <InstrumentsDetailModal
+          v-if="doesInstrumentsHaveDescription"
+          :modal-content="instrumentsDetailModalContent"
+        />
       </VCol>
       <VCol :cols="12" class="d-flex flex-column available-instruments">
-        <template v-if="isLoadingAvailableInstruments">
-          <VSkeletonLoader v-for="n in 3" :key="n" type="card" />
-        </template>
+        <!-- Start : Skeleton for lazy load -->
+        <VRow v-if="isLoadingAvailableInstruments">
+          <VCol v-for="n in 3" :key="n" :cols="4">
+            <VSkeletonLoader type="image" />
+          </VCol>
+        </VRow>
+        <!-- End : Skeleton for lazy load -->
         <CustomCheckboxWithIcon
           v-else
           v-model:selected-checkbox="selectedInstruments"

@@ -4,7 +4,6 @@ import RedeemGiftCardEnteryForm from "~/views/forms/RedeemGiftCardEnteryForm.vue
 import RedeemInitialForm from "~/views/forms/RedeemInitialForm.vue";
 import RedeemNoBrokerProfileForm from "~/views/forms/RedeemNoBrokerProfileForm.vue";
 import RedeemOtpForm from "~/views/forms/RedeemOtpForm.vue";
-import RedeemCongrats from "~/views/redeem/RedeemCongrats.vue";
 import RedeemHeader from "~/views/redeem/RedeemHeader.vue";
 import { RedeemState } from "~/enums/redeemState";
 import RedeemStepper from "~/views/RedeemStepper.vue";
@@ -34,7 +33,7 @@ const loginModel = reactive({
   pin: "",
   giftCode: "",
   dsCode: "",
-  giftAmount: 20000000,
+  giftAmount: undefined,
   registarationStatus: RegistertionState.NotRegistered,
 });
 
@@ -69,44 +68,40 @@ const handleEnterGiftFormSubmit = async (
 
 <template>
   <div>
-    <template v-if="currentState !== RedeemState.Success">
-      <RedeemHeader />
-      <RedeemStepper :active-step="currentState" />
-      <div>
-        <RedeemInitialForm
-          v-if="currentState === RedeemState.Authentication"
-          @submit="handleInitialFormSubmit"
-        />
-        <RedeemOtpForm
-          v-else-if="currentState === RedeemState.Otp"
-          :mobile-number="loginModel.mobileNumber"
-          :national-code="loginModel.nationalCode"
-          @submit="hadleOtpFormSubmit"
-          @previous-step="setCurrentState(RedeemState.Authentication)"
-        />
-        <RedeemGiftCardEnteryForm
-          v-else-if="currentState === RedeemState.EnterGift"
-          :ds-code="loginModel.dsCode"
-          :gift-code="loginModel.giftCode"
-          @submit="handleEnterGiftFormSubmit"
-        />
-        <RedeemNoBrokerProfileForm
-          v-else-if="currentState === RedeemState.NoBrokerProfile"
-          :ds-code="loginModel.dsCode"
-          :registeration-state="loginModel.registarationStatus"
-          @submit="setCurrentState(RedeemState.ChooseInstruments)"
-        />
-        <RedeemSelectInstrumentForm
-          v-else-if="currentState === RedeemState.ChooseInstruments"
-          :pin="loginModel.pin"
-          :ds-code="loginModel.dsCode"
-          :gift-code="loginModel.giftCode"
-          :gift-amount="loginModel.giftAmount"
-          @submit="setCurrentState(RedeemState.Success)"
-        />
-      </div>
-    </template>
-    <RedeemCongrats v-if="currentState === RedeemState.Success" />
+    <RedeemHeader />
+    <RedeemStepper :active-step="currentState" />
+    <div>
+      <RedeemInitialForm
+        v-if="currentState === RedeemState.Authentication"
+        @submit="handleInitialFormSubmit"
+      />
+      <RedeemOtpForm
+        v-else-if="currentState === RedeemState.Otp"
+        :mobile-number="loginModel.mobileNumber"
+        :national-code="loginModel.nationalCode"
+        @submit="hadleOtpFormSubmit"
+        @previous-step="setCurrentState(RedeemState.Authentication)"
+      />
+      <RedeemGiftCardEnteryForm
+        v-else-if="currentState === RedeemState.EnterGift"
+        :ds-code="loginModel.dsCode"
+        :gift-code="loginModel.giftCode"
+        @submit="handleEnterGiftFormSubmit"
+      />
+      <RedeemNoBrokerProfileForm
+        v-else-if="currentState === RedeemState.NoBrokerProfile"
+        :ds-code="loginModel.dsCode"
+        :registeration-state="loginModel.registarationStatus"
+        @submit="setCurrentState(RedeemState.ChooseInstruments)"
+      />
+      <RedeemSelectInstrumentForm
+        v-else-if="currentState === RedeemState.ChooseInstruments"
+        :pin="loginModel.pin"
+        :ds-code="loginModel.dsCode"
+        :gift-code="loginModel.giftCode"
+        :gift-amount="loginModel.giftAmount"
+      />
+    </div>
   </div>
 </template>
 <style>
