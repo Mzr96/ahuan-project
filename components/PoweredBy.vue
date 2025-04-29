@@ -4,5 +4,11 @@
     <a class="text-decoration-none text-primary" href="https://rabinpay.com/"
       >رابین‌پی</a
     >
+    و
+    <a
+      class="text-decoration-none text-primary"
+      href="https://rayanhamafza.com/"
+      >رایان هم‌افزا</a
+    >
   </div>
 </template>
