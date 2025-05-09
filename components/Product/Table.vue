@@ -105,12 +105,12 @@ const emits = defineEmits<{
 }>();
 
 const headers = [
-  { key: "Image", title: "", sortable: false, minWidth: "130px" },
+  { key: "Image", title: "", sortable: false, width: 130, minWidth: 130 },
   { key: "Title", title: "عنوان محصول" },
   { key: "Description", title: "توضیحات", sortable: false },
   { key: "Price", title: "قیمت", sortable: false },
   { key: "Category", title: "دسته‌بندی", sortable: false },
-  { key: "Id", title: "اقدام", sortable: false, maxWidth: "80px" },
+  { key: "Id", title: "اقدام", sortable: false, width: 100 },
 ];
 
 const searchValue = ref<string>("");
