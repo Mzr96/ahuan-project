@@ -1,7 +1,7 @@
 <template>
   <VDataTable
     :items="tableData"
-    :loading="isFetchingTableData"
+    :loading="isFetching"
     :search="searchValue"
     :filter-keys="['Title']"
     :headers
@@ -16,7 +16,7 @@
             label="جست‌وجو"
             placeholder="جست‌وجو در عنوان محصولات"
             hide-details
-            :disabled="isFetchingTableData"
+            :disabled="isFetching"
           />
         </VResponsive>
         <template #append>
@@ -25,7 +25,7 @@
             size="x-small"
             rounded="large"
             variant="text"
-            :disabled="isFetchingTableData"
+            :disabled="isFetching"
             @click="$emit('add')"
           >
             <VIcon>mdi-plus</VIcon>
@@ -36,7 +36,7 @@
             size="x-small"
             rounded="large"
             variant="text"
-            :disabled="isFetchingTableData"
+            :disabled="isFetching"
             @click="$emit('refresh')"
           >
             <VIcon>mdi-refresh</VIcon>
@@ -90,11 +90,11 @@
 <script lang="ts" setup>
 interface Props {
   tableData: Product[];
-  isFetchingTableData?: boolean;
+  isFetching?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
-  isFetchingTableData: false,
+  isFetching: false,
 });
 
 const emits = defineEmits<{
@@ -105,7 +105,7 @@ const emits = defineEmits<{
 }>();
 
 const headers = [
-  { key: "Image", title: "", sortable: false, width: "130px" },
+  { key: "Image", title: "", sortable: false, minWidth: "130px" },
   { key: "Title", title: "عنوان محصول" },
   { key: "Description", title: "توضیحات", sortable: false },
   { key: "Price", title: "قیمت", sortable: false },
